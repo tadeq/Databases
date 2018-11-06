@@ -1,0 +1,12 @@
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\ProductsApp.exe.config
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\ProductsApp.exe
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\ProductsApp.pdb
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\EntityFramework.dll
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\EntityFramework.SqlServer.dll
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\EntityFramework.xml
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\bin\Debug\EntityFramework.SqlServer.xml
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\obj\Debug\ProductsApp.csprojResolveAssemblyReference.cache
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\obj\Debug\ProductsApp.exe
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\obj\Debug\ProductsApp.pdb
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\obj\Debug\ProductsApp.CategoryForm.resources
+E:\Bazy2\EntityFramework\ProductsApp\ProductsApp\obj\Debug\ProductsApp.csproj.GenerateResource.Cache
