@@ -14,6 +14,7 @@ namespace ProductsApp
 {
     public partial class CategoryForm : Form
     {
+        ProdContext db;
         public CategoryForm()
         {
             InitializeComponent();
@@ -21,15 +22,23 @@ namespace ProductsApp
 
         private void CategoryForm_Load(object sender, EventArgs e)
         {
-            ProdContext db = new ProdContext();
+            CategoryDgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            ProductDgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            db = new ProdContext();
             db.Categories.Load();
             this.categoryBindingSource.DataSource = db.Categories.Local.ToBindingList();
+            
         }
 
         private void Submit_Click(object sender, EventArgs e)
         {
-            SqlDataAdapter dataAdapter = new SqlDataAdapter();
-            dataAdapter.Update((DataTable)this.categoryBindingSource.DataSource);
+            this.db.SaveChanges();
+            this.CategoryDgv.Refresh();
+        }
+
+        private void CategoryDgv_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            db.Products.Load();
         }
     }
 }
