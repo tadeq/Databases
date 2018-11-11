@@ -42,6 +42,7 @@
             this.categoryIDDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.unitPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.productsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.AddProd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.CategoryDgv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.categoryBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ProductDgv)).BeginInit();
@@ -151,11 +152,22 @@
             this.productsBindingSource.DataMember = "Products";
             this.productsBindingSource.DataSource = this.categoryBindingSource;
             // 
+            // AddProd
+            // 
+            this.AddProd.Location = new System.Drawing.Point(552, 160);
+            this.AddProd.Name = "AddProd";
+            this.AddProd.Size = new System.Drawing.Size(144, 41);
+            this.AddProd.TabIndex = 3;
+            this.AddProd.Text = "Add product";
+            this.AddProd.UseVisualStyleBackColor = true;
+            this.AddProd.Click += new System.EventHandler(this.AddProd_Click);
+            // 
             // CategoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(961, 410);
+            this.Controls.Add(this.AddProd);
             this.Controls.Add(this.ProductDgv);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.CategoryDgv);
@@ -185,5 +197,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn categoryIDDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn unitPriceDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource productsBindingSource;
+        private System.Windows.Forms.Button AddProd;
     }
 }

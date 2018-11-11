@@ -10,7 +10,6 @@ namespace ProductsApp
 {
     class OrderDetails
     {
-        //public int DetailID { get; set; }
         [Key]
         [Column(Order = 1)]
         public int OrderID { get; set; }

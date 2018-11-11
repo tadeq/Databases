@@ -17,12 +17,13 @@ namespace ProductsApp
         DataTable toOrder = new DataTable();
         public MakeOrder()
         {
+            db = new ProdContext();
             InitializeComponent();
+            SelectedDgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void MakeOrder_Load(object sender, EventArgs e)
         {
-            db = new ProdContext();
             db.Products.Load();
             this.productsBindingSource.DataSource = db.Products.Local.ToBindingList();
             toOrder.Columns.Add("ProductID", typeof(int));

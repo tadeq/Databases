@@ -79,29 +79,24 @@ namespace ProductsApp
             }
         }
 
-        static void PrintCategoriesProducts_Method_NavigationProperties(ProdContext db)
-        {
-            
-        }
-
-        static void PrintCategoriesProducts_Query_LazyLoading(ProdContext db)
-        {
-
-        }
-
         static void PrintCategoriesProducts_Query_EagerLoading(ProdContext db)
         {
-
-        }
-
-        static void PrintCategoriesProducts_Method_LazyLoading(ProdContext db)
-        {
-           
-        }
-
-        static void PrintCategoriesProducts_Method_EagerLoading(ProdContext db)
-        {
-            
+            var query = from category in db.Categories.Include("Categories")
+                        select new
+                        {
+                            Category = category,
+                            Products = category.Products
+                        };
+            foreach (var cat in query)
+            {
+                if (cat.Products != null)
+                {
+                    foreach (Product prod in cat.Products)
+                    {
+                        Console.WriteLine("{0}\t{1}\t{2}\t{3}", cat.Category.CategoryID, cat.Category.Name, prod.ProductID, prod.Name);
+                    }
+                }
+            }
         }
 
         static void PrintProductsSum_Query(ProdContext db)
@@ -139,28 +134,10 @@ namespace ProductsApp
             }
         }
 
-
         static void Main(string[] args)
         {
             using (var db = new ProdContext())
-            {/*
-                Console.WriteLine("Podaj nazwe kategorii");
-                var CategoryName = Console.ReadLine();
-                var category = new Category { Name = CategoryName };
-                db.Categories.Add(category);
-                db.SaveChanges();*/
-                //PrintCategoriesNames(db);
-                //PrintCategoriesNames_Immediate(db);
-                //PrintCategoriesProducts_Query_Joins(db);
-                //PrintCategoriesProducts_Method_Joins(db);
-                //PrintCategoriesProducts_Query_NavigationProperties(db);
-                //Application.Run(new CategoryForm());
-                //db.Customers.Add(new Customer { CompanyName = "cust1" });
-                //db.Customers.Add(new Customer { CompanyName = "cust2" });
-                //db.SaveChanges();
-                //Application.Run(new MakeOrder());
-                //PrintProductsSum_Query(db);
-                //PrintProductsSum_Method(db);
+            {
                 Application.Run(new MainForm());
             }
         }
