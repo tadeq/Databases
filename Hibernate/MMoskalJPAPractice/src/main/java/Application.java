@@ -3,6 +3,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.TypedQuery;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+
 
 public class Application {
     private static SessionFactory sessionFactory = null;
@@ -11,25 +17,8 @@ public class Application {
         sessionFactory = getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        Supplier supplier = new Supplier("Supplier");
-        Category category = new Category("Category");
-        for (int i=0;i<5;i++){
-            Product product = new Product("Product"+i);
-            product.setSupplier(supplier);
-            product.setCategory(category);
-            session.save(product);
-        }
-        session.save(supplier);
-        for (Product p : category.getProducts()){
-            System.out.println(p.getCategory());
-        }
-        System.out.println(category.getProducts());
-        session.save(category);
-        Product foundProduct = session.get(Product.class,"Product1");
-        Invoice invoice = new Invoice(10);
-        foundProduct.addInvoice(invoice);
-        session.save(invoice);
         tx.commit();
+        showMainMenu(session);
         session.close();
         sessionFactory.close();
     }
@@ -40,5 +29,70 @@ public class Application {
             sessionFactory = configuration.configure().buildSessionFactory();
         }
         return sessionFactory;
+    }
+
+    private static void showMainMenu(Session session) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("What do you want to do?");
+        System.out.println("P - show products");
+        System.out.println("C - show customers");
+        System.out.println("S - show suppliers");
+        System.out.println("O - make order");
+        String option = scanner.nextLine();
+        Transaction tx = session.beginTransaction();
+        switch (option) {
+            case "P":
+            case "p":
+                TypedQuery<Product> productsQuery = session.createQuery("from Product", Product.class);
+                List<Product> products = productsQuery.getResultList();
+                for (Product p : products)
+                    System.out.println(p.toString());
+                break;
+            case "C":
+            case "c":
+                TypedQuery<Customer> customersQuery = session.createQuery("from Customer", Customer.class);
+                List<Customer> customers = customersQuery.getResultList();
+                for (Customer c : customers)
+                    System.out.println(c.toString());
+                break;
+            case "S":
+            case "s":
+                TypedQuery<Supplier> suppliersQuery = session.createQuery("from Supplier", Supplier.class);
+                List<Supplier> suppliers = suppliersQuery.getResultList();
+                for (Supplier s : suppliers)
+                    System.out.println(s.toString());
+                break;
+            case "O":
+            case "o":
+                Set<Product> newProducts = new HashSet<>();
+                System.out.print("Your company name: ");
+                String companyName = scanner.nextLine();
+                Customer customer = session.get(Customer.class, companyName);
+                if (customer == null) {
+                    System.out.println("Wrong company name");
+                    break;
+                }
+                System.out.print("Products' names (empty line to end): ");
+                String productName = scanner.nextLine();
+                while (!productName.equals("")) {
+                    productName = scanner.nextLine();
+                    Product prod = session.get(Product.class, productName);
+                    if (prod != null) {
+                        newProducts.add(prod);
+                    } else {
+                        System.out.println("Wrong product name. It won't be added to order");
+                        break;
+                    }
+                }
+                System.out.print("Number of units: ");
+                int number = scanner.nextInt();
+                Invoice invoice = new Invoice(number, customer, newProducts);
+                session.save(invoice);
+                break;
+            default:
+                System.out.println("Invalid option");
+                break;
+        }
+        tx.commit();
     }
 }

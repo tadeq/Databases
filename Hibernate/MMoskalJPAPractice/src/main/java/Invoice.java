@@ -15,19 +15,31 @@ public class Invoice {
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Product> products;
 
-    public Invoice(){}
+    public Invoice() {
+    }
 
-    public Invoice(int quantity){
+    public Invoice(int quantity) {
         this.quantity = quantity;
         this.products = new HashSet<>();
     }
 
-    public void addProduct(Product p){
+    public Invoice(Integer quantity, Customer customer, Set<Product> products) {
+        this.quantity = quantity;
+        this.customer = customer;
+        this.products = products;
+    }
+
+    public void addProduct(Product p) {
         this.products.add(p);
         p.getInvoices().add(this);
     }
 
     public Set<Product> getProducts() {
         return products;
+    }
+
+    public void setCustomer(Customer c) {
+        this.customer = c;
+        c.getInvoices().add(this);
     }
 }

@@ -21,6 +21,7 @@ public class Category {
 
     public void addProduct(Product p) {
         this.products.add(p);
+        p.setCategory(this);
     }
 
     public List<Product> getProducts() {

@@ -7,4 +7,11 @@ public abstract class Company {
     protected String companyName;
     @Embedded
     private Address address;
+
+    public Company() {
+    }
+
+    public Company(String name) {
+        this.companyName = name;
+    }
 }

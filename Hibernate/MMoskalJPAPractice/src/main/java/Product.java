@@ -10,7 +10,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "SUPPLIER_FK")
     private Supplier supplier;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CATEGORY_FK")
     private Category category;
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -19,8 +19,9 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name) {
+    public Product(String name, int unitsInStock) {
         this.productName = name;
+        this.unitsInStock = unitsInStock;
         invoices = new HashSet<>();
     }
 
@@ -31,7 +32,7 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
-        category.addProduct(this);
+        category.getProducts().add(this);
     }
 
     public Supplier getSupplier() {
@@ -46,8 +47,18 @@ public class Product {
         return invoices;
     }
 
-    public void addInvoice(Invoice invoice){
+    public void addInvoice(Invoice invoice) {
         this.invoices.add(invoice);
         invoice.getProducts().add(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productName='" + productName + '\'' +
+                ", unitsInStock=" + unitsInStock +
+                ", supplier=" + supplier +
+                ", category=" + category +
+                '}';
     }
 }
