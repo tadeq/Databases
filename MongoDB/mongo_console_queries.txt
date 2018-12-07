@@ -1,0 +1,27 @@
+1.Zapytanie proste znajdujące pytania zadawane w rundach „Jeopardy!” 1 stycznia 2011 lub później posortowane od najnowszego. W wyświetlanych wynikach pomijany jest numer programu.
+
+db.questions.find({"air_date" : {$gte : "2011-01-01"}, "round" : "Jeopardy!"},{"show_number":0}).sort({"air_date" : -1})
+
+2.Zapytanie z wykorzystaniem agregacji znajdujące kategorie oraz ilość zadanych pytań z danej kategorii w programach o numerach poniżej 2500.
+
+db.questions.aggregate([
+                        {$match: {"show_number" : {$lt : "2500"}}},
+                        {$group:{_id:"$category",total:{$sum:1}}},
+                        {$sort:{total : -1}}
+                     ])
+
+3.Zapytanie z wykorzystaniem mechanizmu map reduce obliczające średnią wartość pytań należących do poszczególnych kategorii.
+
+db.questions.mapReduce(
+   function() {
+      if (this.category)
+        emit(this.category, new NumberInt(((new String(this.value)).substring(1))));
+   },
+   function(category, values){
+        var sum = Array.sum(values);
+        return sum/values.length
+   },
+   {
+       query:{},
+       out: "result"}
+).find().sort({"value":-1})
