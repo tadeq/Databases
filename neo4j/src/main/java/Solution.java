@@ -16,22 +16,27 @@ public class Solution {
         System.out.println(findRatedMoviesForUser("maheshksp"));
         System.out.println(findCommonMoviesForActors("Emma Watson", "Daniel Radcliffe"));
         System.out.println(findMovieRecommendationForUser("emileifrem"));
-        // 4
+        System.out.println(4);
         System.out.println(findActorByName("Jan Kowalski"));
         System.out.println(findMovieByTitleLike("Nowy film"));
         System.out.println(findMoviesForActor("Jan Kowalski"));
-        // 5
+        System.out.println(5);
         System.out.println(getActorData("Jan Kowalski"));
-        // 6
+        System.out.println(6);
         System.out.println(findActorsActingInMoreThan(6));
-        // 7
+        System.out.println(7);
         System.out.println(getAvgActsInForActorsActingInMoreThan(7));
-        // 8
+        System.out.println(8);
         System.out.println(findActorsActAndDirMoreThan(5, 1));
-        // 9
+        System.out.println(9);
         System.out.println(findFriendsRatingMovieAtLeast("maheshksp", 3));
-        // 10
+        System.out.println(10);
         System.out.println(findPathsBetweenActors("Jake Gyllenhaal", "Bradley Cooper", 4));
+        System.out.println(11);
+        System.out.println("Average of 25 executions without index: " + measureQueryExecutionTime());
+        addActorIndex();
+        System.out.println("Average of 25 executions with index: " + measureQueryExecutionTime());
+        dropActorIndex();
     }
 
     private String findActorByName(final String actorName) {
@@ -56,8 +61,9 @@ public class Solution {
     }
 
     private String findMovieRecommendationForUser(final String userLogin) {
-        //TODO
-        return null;
+        StatementResult result = session.run("MATCH (u:Person{login:$userLogin})-[:RATED]->(m:Movie)<-[:RATED]-(u2)-[:RATED]->(movies) return movies.title",
+                parameters("userLogin", userLogin));
+        return result.list().toString();
     }
 
     // zadanie 4
@@ -118,6 +124,34 @@ public class Solution {
         StatementResult result = session.run("MATCH path=(p1:Person{name:$act1})-[*1..4]-(p2:Person{name:$act2}) RETURN path",
                 parameters("act1", actorOne, "act2", actorTwo, "len", maxLength));
         return result.list().toString();
+    }
+
+    // zadanie 11
+    private void addActorIndex() {
+        session.run("CREATE INDEX ON :Actor(name)");
+    }
+
+    private void dropActorIndex() {
+        session.run("DROP INDEX ON :Actor(name)");
+    }
+
+    private String findShortestPath(String actorOne, String actorTwo) {
+        StatementResult result = session.run("MATCH p = shortestPath((p1:Person{name:$act1})-[*]-(p2:Person{name:$act2})) RETURN p"
+                , parameters("act1", actorOne, "act2", actorTwo));
+        return result.list().toString();
+    }
+
+    private double measureQueryExecutionTime() {
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 5; i++) {
+            findShortestPath("Jake Gyllenhaal", "Bradley Cooper");
+            findShortestPath("Keanu Reeves", "Vin Diesel");
+            findShortestPath("Leonardo DiCaprio", "Helena Bonham Carter");
+            findShortestPath("Hugh Jackman", "Scarlett Johansson");
+            findShortestPath("Charlize Theron", "Rosamund Pike");
+        }
+        long endTime = System.nanoTime();
+        return (endTime - startTime) / 1000000000.0 / 25;
     }
 
 }
